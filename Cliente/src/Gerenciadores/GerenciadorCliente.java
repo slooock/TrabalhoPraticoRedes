@@ -24,10 +24,12 @@ public class GerenciadorCliente {
     public void conectaNoServidor() throws IOException
     {
         int porta = 11111;
+        //conecta o cliente com o servidor na porta escolhida
         clienteTeste = new Socket("127.0.0.1", porta);
         System.out.println("Conectado com servidor");
     }
     
+    //Manda mensagem para o servidor
     public void comunica(String msg) throws IOException{
      
         OutputStream out = clienteTeste.getOutputStream();
@@ -35,6 +37,8 @@ public class GerenciadorCliente {
         dos.writeUTF(msg);
         //ouveServidor();
     }
+    
+    //recebe mensagem do servidor e retorna essa mensagem
     public String ouveServidor() throws IOException
     {
         InputStream in = clienteTeste.getInputStream();

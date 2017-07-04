@@ -6,11 +6,11 @@
 package Telas;
 
 import Gerenciadores.GerenciadorCliente;
-import Cliente.TelaCliente;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -26,8 +26,11 @@ public class TelaGame extends javax.swing.JFrame {
     public TelaGame(String nomeMeuPresidente) {
         initComponents();
         setSize(858, 450);
+        //Seta pernogame escolhido
         this.nomeMeuPresidente = nomeMeuPresidente;
         gerenciadorCliente = new GerenciadorCliente();
+        
+        //controle de componentes na tela
         jLabel3.setVisible(false);
         jlMeusPontos.setText("0");
         jlPontosOponente.setText("0");
@@ -43,7 +46,7 @@ public class TelaGame extends javax.swing.JFrame {
         jbTesoura.setVisible(false);
         jlMeusPontos.setVisible(false);
         jlPontosOponente.setVisible(false);
-        
+
     }
 
     public TelaGame() {
@@ -75,6 +78,7 @@ public class TelaGame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("HOUSE OF PEDRA PAPEL TESOURA");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -160,6 +164,7 @@ public class TelaGame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //metodos usados para carregar imagens no diretorio e setar na tela
     public void imagemIcon(String diretorio) {
         ImageIcon imagem = new ImageIcon(getClass().getResource("/Imagens/" + diretorio));
         jlFoto1.setIcon(imagem);
@@ -175,29 +180,28 @@ public class TelaGame extends javax.swing.JFrame {
         jlFotoFinal.setIcon(imagem);
     }
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+
         try {
             //=============conectanco cliente no servidor=========
             gerenciadorCliente.conectaNoServidor();
+            
+            //recebe resposta do servidor
             String resposta = gerenciadorCliente.ouveServidor();
             System.out.println(resposta);
             if (resposta.equals("AGUARDE CONEXÃO DE OUTRO CLIENTE")) {
-                /*jLabel3.setVisible(true);
-                jbPedra.setVisible(false);
-                jbPapel.setVisible(false);
-                jbTesoura.setVisible(false);
-                 */
-                System.out.println("a");
+                //entra nesse if somente se for o primeiro cliente a conectar e espera o proximo cliente
                 System.out.println(gerenciadorCliente.ouveServidor());
 
             }
+            //controle de compontentes na tela
             jbPedra.setVisible(true);
             jbPapel.setVisible(true);
             jbTesoura.setVisible(true);
             jLabel3.setVisible(false);
             jlMeusPontos.setVisible(true);
             jlPontosOponente.setVisible(true);
-            //=============conectanco cliente no servidor=========
-
+            
+            //manda para o servidor o personagem escolhido
             if (nomeMeuPresidente.equals("DILMA")) {
                 gerenciadorCliente.comunica("DILMA");
                 imagemIcon("DilmaPequena.jpg");
@@ -208,9 +212,11 @@ public class TelaGame extends javax.swing.JFrame {
                 gerenciadorCliente.comunica("TEMER");
                 imagemIcon("TemerPequeno.jpg");
             }
-
+            
+            //recebe do servidor o personagem escolhido
             String presOponente = gerenciadorCliente.ouveServidor();
 
+            //carrega as imagens do personagem oponente escolhido
             if (presOponente.equals("DILMA")) {
                 imagemIconOponente("DilmaPequena.jpg");
             } else if (presOponente.equals("FRANK")) {
@@ -218,16 +224,11 @@ public class TelaGame extends javax.swing.JFrame {
             } else if (presOponente.equals("TEMER")) {
                 imagemIconOponente("TemerPequeno.jpg");
             }
-
-            /*    
-            rbPapel.setEnabled(true);
-            rbPedra.setEnabled(true);
-            rbTesoura.setEnabled(true);
-            jButton1.setEnabled(true);
-             */
         } catch (IOException ex) {
-            Logger.getLogger(TelaCliente.class.getName()).log(Level.SEVERE, null, ex);
+            //mensagem de erro caso não consiga conectar oa servidor
+            JOptionPane.showMessageDialog(null, "Servidor não encontrado", "Erro de conexão", JOptionPane.ERROR_MESSAGE);
         }
+        
 
 
     }//GEN-LAST:event_formWindowOpened
@@ -236,15 +237,18 @@ public class TelaGame extends javax.swing.JFrame {
         mandaMensagem("PAPEL");
     }//GEN-LAST:event_jbPapelActionPerformed
 
-    public void desativaBotoes(){
-         jbPedra.setEnabled(false);
+    public void desativaBotoes() {
+        jbPedra.setEnabled(false);
         jbPapel.setEnabled(false);
-        jbTesoura.setEnabled(false);    
+        jbTesoura.setEnabled(false);
     }
     private void jbTesouraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbTesouraActionPerformed
         mandaMensagem("TESOURA");
     }//GEN-LAST:event_jbTesouraActionPerformed
 
+    /*
+        Metodo que manda a jogada escolhida para o servidor
+    */
     public void mandaMensagem(String mensagem) {
 
         String escolha = "";
@@ -253,21 +257,27 @@ public class TelaGame extends javax.swing.JFrame {
 
         escolha = mensagem;
         try {
+            ///envia a jogada escolhida ao servidor
             gerenciadorCliente.comunica(escolha);
-            
+
+            //ouve do servidor quem venceu a rodada
             resposta = gerenciadorCliente.ouveServidor();
-            
+
             System.out.println("Meu Ponto " + resposta);
+            
+            //Soma 1 na pontuação do vencedor da rodada
             if (resposta.equals("VENCEU")) {
                 meusPontosTotal = meusPontosTotal + 1;
             } else if (resposta.equals("PERDEU")) {
                 pontosInimigoTotal = pontosInimigoTotal + 1;
             } else if (resposta.equals("EMPATE")) {
-
+                //em caso de empate, não faz nada
             }
             //System.out.println("Ponto inimigo "+pontosInimigos);
             jlMeusPontos.setText(meusPontosTotal + "");
             jlPontosOponente.setText(pontosInimigoTotal + "");
+            
+            //altera a tela, quando um dos clientes conquistam a vitória
             if (meusPontosTotal == 3 || pontosInimigoTotal == 3) {
                 jbPedra.setVisible(false);
                 jbPapel.setVisible(false);
@@ -279,6 +289,7 @@ public class TelaGame extends javax.swing.JFrame {
                 jbSair.setVisible(true);
                 jBJogarNovamente.setVisible(true);
 
+                //verifica se venceu a partida e adiciona imagem "feliz", caso tenha perdido, adiciona imagem "triste"
                 if (meusPontosTotal == 3) {
                     jLabel2.setVisible(true);
                     jLabel2.setText("VOCÊ VENCEU");
@@ -308,8 +319,8 @@ public class TelaGame extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(TelaGame.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
+    
     private void jbPedraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPedraActionPerformed
         mandaMensagem("PEDRA");
     }//GEN-LAST:event_jbPedraActionPerformed

@@ -17,6 +17,7 @@ public class TelaPresidente extends javax.swing.JFrame {
     public TelaPresidente() {
         initComponents();
         setSize(858, 450);
+        jButton3.setToolTipText("Francis Joseph “Frank” Underwood, nascido em 5 de novembro de 1959, é o 46º e atual presidente \n dos Estados Unidos, assumindo a função depois da renúncia do Presidente Garrett Walker e era um dos representantes do 5º distrito da Carolina do Sul. Sua habilidad especial é pedra");
     }
 
     /**
@@ -34,10 +35,11 @@ public class TelaPresidente extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("HOUSE OF PEDRA PAPEL TESOURA");
         getContentPane().setLayout(null);
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/Frank.jpg"))); // NOI18N
-        jButton3.setToolTipText("Francis Joseph “Frank” Underwood, nascido em 5 de novembro de 1959, é o 46º e atual presidente dos Estados Unidos, assumindo a função depois da renúncia do Presidente Garrett Walker e era um dos representantes do 5º distrito da Carolina do Sul. Sua habilidad especial é pedra");
+        jButton3.setToolTipText("");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);

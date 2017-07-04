@@ -32,6 +32,7 @@ public class TelaInicial extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("HOUSE OF JO KEN PO");
         getContentPane().setLayout(null);
 
         jButton1.setText("Entrar");
